@@ -4,10 +4,13 @@ import io from 'socket.io-client';
 import Header from './components/Header/Header';
 import UserForm from './components/LoginForm/LoginForm';
 
-const socket = io('http://localhost:3000');
+const socket = io('/');
+
 
 function App() {
   const [user, setUser] = useState(null);
+  const [allUsers, setAllUsers] = useState([]);
+
 
   useEffect(() => {
     socket.on('connect', () => {
@@ -19,28 +22,22 @@ function App() {
     }
   });
 
-  const handleRegister = async (formData) => {
+  const handleRegister = (formData) => {
     const { nickName, background } = formData;
-    const response = await fetch('/createUser', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        socketId: socket.id,
-        nickName,
-        type: "viewer",
-        score: 0,
+    const newUser = {
+      socketId: socket.id,
+      nickName,
+      type: "viewer",
+      score: 0,
+      board: {
         background,
         width: 600,
         height: 600,
-      }),
-    });
-
-    if (response.ok) {
-      const user = await response.json();
-      setUser(user);
-    }
+      }
+    };
+    setUser(newUser);
+    setAllUsers([...allUsers, newUser]);
+    socket.emit("register", newUser);
   };
 
   return (
@@ -48,9 +45,10 @@ function App() {
       <Header />
       {!user ? (
         <UserForm onRegister={handleRegister} />
-      ) : <div>
+      ) : (<div>
         <h1>Welcome, {user.nickName}</h1>
-      </div>}
+      </div>)
+      }
     </div>
   )
 }

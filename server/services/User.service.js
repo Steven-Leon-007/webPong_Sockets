@@ -7,10 +7,9 @@ class UserService {
     }
 
     // Crear un nuevo usuario
-    crearUsuario(socketId, nickName, type, score, board) {
-        const nuevoUsuario = new User(socketId, nickName, type, score, board);
+    crearUsuario(user) {
+        const nuevoUsuario = new User(user);
         this.users.push(nuevoUsuario);
-        return nuevoUsuario;
     }
 
     // Obtener un usuario por su nickName
