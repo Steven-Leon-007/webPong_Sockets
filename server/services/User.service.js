@@ -7,22 +7,22 @@ class UserService {
     }
 
     // Crear un nuevo usuario
-    crearUsuario(nickName, type, score, board) {
-        const nuevoUsuario = new User(nickName, type, score, board);
+    crearUsuario(socketId, nickName, type, score, board) {
+        const nuevoUsuario = new User(socketId, nickName, type, score, board);
         this.users.push(nuevoUsuario);
         return nuevoUsuario;
     }
 
     // Obtener un usuario por su nickName
-    obtenerUsuarioPorNickName(nickName) {
-        return this.users.find(user => user.nickName === nickName);
+    obtenerUsuarioPorSocketId(socketId) {
+        return this.users.find(user => user.socketId === socketId);
     }
 
     // Actualizar el score de un usuario
-    actualizarScoreUsuario(nickName, nuevoScore) {
-        const usuario = this.obtenerUsuarioPorNickName(nickName);
+    actualizarScoreUsuario(socketId) {
+        const usuario = this.obtenerUsuarioPorSocketId(socketId);
         if (usuario) {
-            usuario.actualizarScore(nuevoScore);
+            usuario.increaseScore();
             return usuario;
         } else {
             throw new Error('Usuario no encontrado');

@@ -8,9 +8,9 @@ const userService = new UserService();
 // Ruta para crear un nuevo usuario
 
  router.post('/createUser', (req, res) => {
-     const { nickName, type, score, background, width, height } = req.body;
+     const { socketId, nickName, type, score, background, width, height } = req.body;
      const board = new Board(background, width, height);
-     const usuario = userService.crearUsuario(nickName, type, score, board);
+     const usuario = userService.crearUsuario(socketId, nickName, type, score, board);
      res.status(201).json(usuario);
  });
 
