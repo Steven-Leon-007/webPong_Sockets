@@ -31,4 +31,14 @@ router.get('/users/:socketId', (req, res) => {
     }
 });
 
+router.delete('/users/:socketId', (req, res) => {
+    const { socketId } = req.params;
+    try {
+        userService.deleteUser(socketId);
+        res.status(204).send();
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
 export default router;

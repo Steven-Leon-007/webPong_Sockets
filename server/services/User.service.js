@@ -5,19 +5,16 @@ class UserService {
     constructor() {
         this.users = [];
     }
-
-    // Crear un nuevo usuario
     createUser(user) {
         const newUser = new User(user);
         this.users.push(newUser);
     }
-
-    // Obtener un usuario por su nickName
+    deleteUser(socketId) {
+        this.users = this.users.filter(user => user.socketId !== socketId);
+    }
     getUserBySocketId(socketId) {
         return this.users.find(user => user.socketId === socketId);
     }
-
-    // Actualizar el score de un usuario
     updateUserScore(socketId) {
         const user = this.getUserBySocketId(socketId);
         if (user) {
@@ -27,8 +24,6 @@ class UserService {
             throw new Error('User not found');
         }
     }
-
-    // Obtener todos los usuarios
     getAllUsers() {
         return this.users;
     }
