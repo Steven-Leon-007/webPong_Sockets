@@ -17,8 +17,8 @@ app.use('/', router);
 io.on("connection", (socket) => {
     console.log(`User connected: ${socket.id}`);
     socket.on("register", (user) => {
-        userService.crearUsuario(user);
-        console.log("usuarios conectaos: ", userService.obtenerTodosLosUsuarios());
+        userService.createUser(user);
+        console.log("usuarios conectaos: ", userService.getAllUsers());
     })
     socket.on('disconnect', () => {
         console.log(`User disconnected: ${socket.id}`);

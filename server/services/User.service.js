@@ -7,29 +7,29 @@ class UserService {
     }
 
     // Crear un nuevo usuario
-    crearUsuario(user) {
-        const nuevoUsuario = new User(user);
-        this.users.push(nuevoUsuario);
+    createUser(user) {
+        const newUser = new User(user);
+        this.users.push(newUser);
     }
 
     // Obtener un usuario por su nickName
-    obtenerUsuarioPorSocketId(socketId) {
+    getUserBySocketId(socketId) {
         return this.users.find(user => user.socketId === socketId);
     }
 
     // Actualizar el score de un usuario
-    actualizarScoreUsuario(socketId) {
-        const usuario = this.obtenerUsuarioPorSocketId(socketId);
-        if (usuario) {
-            usuario.increaseScore();
-            return usuario;
+    updateUserScore(socketId) {
+        const user = this.getUserBySocketId(socketId);
+        if (user) {
+            user.increaseScore();
+            return user;
         } else {
-            throw new Error('Usuario no encontrado');
+            throw new Error('User not found');
         }
     }
 
     // Obtener todos los usuarios
-    obtenerTodosLosUsuarios() {
+    getAllUsers() {
         return this.users;
     }
 }
