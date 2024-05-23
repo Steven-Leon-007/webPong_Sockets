@@ -5,12 +5,11 @@ import Board from '../models/Board.model.js';
 const router = Router();
 const userService = new UserService();
 
- router.post('/createUser', (req, res) => {
-     const { socketId, nickName, type, score, background, width, height } = req.body;
-     const board = new Board(background, width, height);
-     const user = userService.createUser(socketId, nickName, type, score, board);
-     res.status(201).json(user);
- });
+router.post('/createUser', (req, res) => {
+    const body = req.body;
+    const user = userService.createUser(body);
+    res.status(201).json(user);
+});
 
 router.get('/users', (req, res) => {
     const users = userService.getAllUsers();
