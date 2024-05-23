@@ -3,6 +3,7 @@ import io from 'socket.io-client';
 const socket = io('/');
 let allUsers = [];
 let updateUsersCallback = null;
+let updateUserCursorCallback = null;
 
 const socketManager = {
     init() {
@@ -24,6 +25,13 @@ const socketManager = {
             allUsers = usersList;
             if (updateUsersCallback) updateUsersCallback(usersList);
         });
+
+        socket.on('cursorMoved', ({ socketId, cursorPosition }) => {
+            allUsers = allUsers.map(user =>
+                user.socketId === socketId ? { ...user, cursorPosition } : user
+            );
+            if (updateUserCursorCallback) updateUserCursorCallback(allUsers);
+        });
     },
 
     registerUser(user) {
@@ -38,6 +46,14 @@ const socketManager = {
 
     onUpdateUsers(callback) {
         updateUsersCallback = callback;
+    },
+
+    updateCursorPosition(cursorPosition) {
+        socket.emit('moveCursor', { socketId: socket.id, cursorPosition });
+    },
+
+    onUpdateUserCursor(callback) {
+        updateUserCursorCallback = callback;
     }
 };
 

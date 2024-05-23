@@ -3,7 +3,7 @@ import socketManager from '../../socketManager';
 
 function loginFormFunctions(setUserLogged) {
   const [formData, setFormData] = useState({ nickName: '', background: '' });
-
+  const screenWidth = window.innerWidth;
   const handleRegister = () => {
     const { nickName, background } = formData;
     const newUser = {
