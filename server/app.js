@@ -27,6 +27,13 @@ io.on("connection", (socket) => {
         userService.deleteUser(socket.id);
         io.emit('userDisconnected', userService.getAllUsers());
     });
+
+    socket.on('moveCursor', ({ socketId, cursorPosition }) => {
+        userService.updateUserCursor(socketId, cursorPosition); // Actualiza la posición del cursor
+        const updatedUser = userService.getUserBySocketId(socketId);
+        io.emit('cursorMoved', { socketId: updatedUser.socketId, cursorPosition: updatedUser.cursorPosition });
+    });
+
 })
 
 server.listen(PORT || 3000, () => {

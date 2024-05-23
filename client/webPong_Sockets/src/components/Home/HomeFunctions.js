@@ -6,11 +6,13 @@ function HomeFunctions() {
 
     useEffect(() => {
         socketManager.onUpdateUsers(setUsers);
+        socketManager.onUpdateUserCursor(setUsers);
 
         setUsers(socketManager.getAllUsers());
 
         return () => {
             socketManager.onUpdateUsers(null);
+            socketManager.onUpdateUserCursor(null);
         };
     }, []);
 

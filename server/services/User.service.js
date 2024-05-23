@@ -5,16 +5,27 @@ class UserService {
     constructor() {
         this.users = [];
     }
+
     createUser(user) {
         const newUser = new User(user);
         this.users.push(newUser);
     }
+
     deleteUser(socketId) {
         this.users = this.users.filter(user => user.socketId !== socketId);
     }
+
     getUserBySocketId(socketId) {
         return this.users.find(user => user.socketId === socketId);
     }
+
+    updateUserCursor(socketId, cursorPosition) {
+        const user = this.getUserBySocketId(socketId);
+        if (user) {
+            user.cursorPosition = cursorPosition;
+        }
+    }
+
     updateUserScore(socketId) {
         const user = this.getUserBySocketId(socketId);
         if (user) {
