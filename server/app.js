@@ -15,13 +15,17 @@ app.use(express.json());
 app.use('/', router);
 
 io.on("connection", (socket) => {
-    console.log(`User connected: ${socket.id}`);
+
+    io.emit('allUsers', userService.getAllUsers());
+
     socket.on("register", (user) => {
         userService.createUser(user);
-        console.log("usuarios conectaos: ", userService.getAllUsers());
-    })
+        io.emit('userRegistered', userService.getAllUsers());
+    });
+
     socket.on('disconnect', () => {
-        console.log(`User disconnected: ${socket.id}`);
+        userService.deleteUser(socket.id);
+        io.emit('userDisconnected', userService.getAllUsers());
     });
 })
 

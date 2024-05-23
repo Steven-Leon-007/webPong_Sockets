@@ -1,28 +1,29 @@
-import React, { useState } from 'react';
+import React from 'react';
+import useLoginFormFunctions from './LoginFormFunctions';
+import "./LoginForm.scss";
 
-function UserForm({ onRegister }) {
-    const [formData, setFormData] = useState({
-        nickName: '',
-        background: '',
-        //Here we must take user's window width, but later on
-    });
+function UserForm({ setUserLogged }) {
+  const { formData, handleRegister, handleInputChange } = useLoginFormFunctions(setUserLogged);
 
-    const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        onRegister(formData);
-    };
-
-    return (
-        <form onSubmit={handleSubmit}>
-            <input name="nickName" placeholder="Nickname" onChange={handleChange} />
-            <input name="background" placeholder="Background" onChange={handleChange} />
-            <button type="submit">Play</button>
-        </form>
-    );
+  return (
+    <div>
+      <input
+        type="text"
+        name="nickName"
+        value={formData.nickName}
+        onChange={handleInputChange}
+        placeholder="Nickname"
+      />
+      <input
+        type="text"
+        name="background"
+        value={formData.background}
+        onChange={handleInputChange}
+        placeholder="Background"
+      />
+      <button onClick={handleRegister}>Register</button>
+    </div>
+  );
 }
 
 export default UserForm;

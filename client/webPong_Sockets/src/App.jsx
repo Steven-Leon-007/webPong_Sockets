@@ -1,56 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
-import io from 'socket.io-client';
-import Header from './components/Header/Header';
+import Home from './components/Home/Home';
 import UserForm from './components/LoginForm/LoginForm';
-
-const socket = io('/');
-
+import socketManager from './socketManager';
 
 function App() {
-  const [user, setUser] = useState(null);
-  const [allUsers, setAllUsers] = useState([]);
-
-
+  const [userLogged, setUserLogged] = useState(false);
   useEffect(() => {
-    socket.on('connect', () => {
-      console.log("User connected to the server");
-    })
-
-    return () => {
-      socket.off('connect');
-    }
-  });
-
-  const handleRegister = (formData) => {
-    const { nickName, background } = formData;
-    const newUser = {
-      socketId: socket.id,
-      nickName,
-      type: "viewer",
-      score: 0,
-      board: {
-        background,
-        width: 600,
-        height: 600,
-      }
-    };
-    setUser(newUser);
-    setAllUsers([...allUsers, newUser]);
-    socket.emit("register", newUser);
-  };
+    socketManager.init();
+  }, []);
 
   return (
     <div className="app">
-      <Header />
-      {!user ? (
-        <UserForm onRegister={handleRegister} />
-      ) : (<div>
-        <h1>Welcome, {user.nickName}</h1>
-      </div>)
+      {!userLogged ? (
+        <UserForm setUserLogged={setUserLogged}/>
+      ):
+        <Home />
       }
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
