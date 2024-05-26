@@ -14,3 +14,6 @@ body {
   color: var(--text-color);
 }
 
+.app{
+  overflow: hidden;
+}
