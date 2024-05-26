@@ -15,7 +15,7 @@ function Home({ selectedUserId }) {
     console.log(users);
 
     return (
-        <div style={{ display: 'flex', overflowX: 'hidden', width: '100%' }} className='home'>
+        <div style={{ display: 'flex', overflowX: 'hidden', width: absoluteScreen.width }} className='home'>
             {users.map((user, index) => (
                 <div
                     ref={el => userRefs.current[index] = el}
@@ -29,6 +29,7 @@ function Home({ selectedUserId }) {
                         whiteSpace: 'nowrap',
                         position: 'relative'
                     }}
+                    className='user-screen'
                 >
                     <div
                         style={{
