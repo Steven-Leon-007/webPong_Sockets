@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import socketManager from '../../socketManager';
 
-function loginFormFunctions(setUserLogged) {
+function loginFormFunctions(setUserLogged, setSelectedUserId) {
   const [formData, setFormData] = useState({ nickName: '', background: '' });
   const screenWidth = window.innerWidth;
   const handleRegister = () => {
@@ -19,6 +19,7 @@ function loginFormFunctions(setUserLogged) {
     };
     socketManager.registerUser(newUser);
     setUserLogged(true);
+    setSelectedUserId(nickName);
   };
 
   const handleInputChange = (e) => {

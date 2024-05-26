@@ -2,8 +2,8 @@ import React from 'react';
 import useLoginFormFunctions from './LoginFormFunctions';
 import "./LoginForm.scss";
 
-function UserForm({ setUserLogged }) {
-  const { formData, handleRegister, handleInputChange } = useLoginFormFunctions(setUserLogged);
+function UserForm({ setUserLogged, setSelectedUserId }) {
+  const { formData, handleRegister, handleInputChange } = useLoginFormFunctions(setUserLogged, setSelectedUserId);
 
   return (
     <div>

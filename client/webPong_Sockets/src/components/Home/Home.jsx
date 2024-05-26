@@ -4,7 +4,7 @@ import Header from './Header/Header';
 import HomeFunctions from './HomeFunctions';
 import socketManager from '../../socketManager';
 
-function Home() {
+function Home({ selectedUserId }) {
     const { users, absoluteScreen } = HomeFunctions();
     const userRefs = useRef([]);
 
@@ -12,7 +12,6 @@ function Home() {
         const handleMouseMove = (event) => {
             const cursorPosition = { x: event.clientX, y: event.clientY };
             socketManager.updateCursorPosition(cursorPosition);
-
         };
 
         window.addEventListener('mousemove', handleMouseMove);
@@ -28,16 +27,24 @@ function Home() {
                 userRefs.current[index].scrollLeft = user.board.position.x;
             }
         });
+    }, [absoluteScreen]);
 
-    }, [users]);
-
+    useEffect(() => {
+        if (selectedUserId) {
+            const userIndex = users.findIndex(user => user.nickName === selectedUserId);
+            if (userIndex !== -1 && userRefs.current[userIndex]) {
+                userRefs.current[userIndex].scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+    }, [selectedUserId, users]);
 
     return (
-        <div style={{ display: 'flex', overflowX: 'hidden', width: '100%' }}>
+        <div style={{ display: 'flex', overflowX: 'hidden', width: '100%' }} className='home'>
             {users.map((user, index) => (
                 <div
                     ref={el => userRefs.current[index] = el}
                     key={index}
+                    id={user.nickName}
                     style={{
                         flex: '0 0 auto',
                         width: user.board.width,

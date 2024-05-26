@@ -6,6 +6,7 @@ import socketManager from './socketManager';
 
 function App() {
   const [userLogged, setUserLogged] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState(null);
   useEffect(() => {
     socketManager.init();
   }, []);
@@ -13,9 +14,9 @@ function App() {
   return (
     <div className="app">
       {!userLogged ? (
-        <UserForm setUserLogged={setUserLogged}/>
+        <UserForm setUserLogged={setUserLogged} setSelectedUserId={setSelectedUserId}/>
       ):
-        <Home />
+        <Home selectedUserId={selectedUserId}/>
       }
     </div>
   );
