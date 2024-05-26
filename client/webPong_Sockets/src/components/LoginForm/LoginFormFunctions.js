@@ -12,8 +12,9 @@ function loginFormFunctions(setUserLogged) {
       score: 0,
       board: {
         background,
-        width: 600,
+        width: screenWidth,
         height: 600,
+        position: { x: 0, y: 0 }
       },
     };
     socketManager.registerUser(newUser);

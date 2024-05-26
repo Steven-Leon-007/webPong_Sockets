@@ -38,6 +38,17 @@ class UserService {
     getAllUsers() {
         return this.users;
     }
+
+    calculatePositions() {
+        let currentX = 0;
+
+        this.users.forEach(user => {
+            user.board.position = { x: currentX, y: 0 };
+            currentX += user.board.width;
+        });
+
+        return { width: currentX, height: 600 };
+    }
 }
 
 export default UserService;
