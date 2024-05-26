@@ -1,55 +1,61 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './Home.scss';
 import Header from './Header/Header';
 import HomeFunctions from './HomeFunctions';
-import socketManager from '../../socketManager';
 
-function Home() {
-    const users = HomeFunctions();
+function Home({ selectedUserId }) {
+    const { useUpdateActions, useMouseMove, useScrollUsers, useScrollIntoView } = HomeFunctions();
+    const userRefs = useRef([]);
+    const { users, absoluteScreen } = useUpdateActions();
 
-    useEffect(() => {
-        const handleMouseMove = (event) => {
-            const cursorPosition = { x: event.clientX, y: event.clientY };
-            socketManager.updateCursorPosition(cursorPosition);
-        };
+    useMouseMove();
+    useScrollUsers(users, userRefs, absoluteScreen);
+    useScrollIntoView(selectedUserId, users, userRefs);
 
-        window.addEventListener('mousemove', handleMouseMove);
-
-        return () => {
-            window.removeEventListener('mousemove', handleMouseMove);
-        };
-    }, []);
+    console.log(users);
 
     return (
-        <div className="home">
-            <Header />
-            <main>
-                <h2>Connected Users:</h2>
-                <ul>
-                    {users.map((user, index) => (
-                        <div key={index}>
-                            <li
-                                style={{
-                                    position: 'absolute',
-                                    left: user.cursorPosition?.x || 0,
-                                    top: user.cursorPosition?.y || 0,
-                                    transform: 'translate(-50%, 250%)',
-                                }}
-                            >
-                                {user.nickName}
-                            </li>
-                            <img src="https://avatars.githubusercontent.com/u/120030275?v=4" alt="test" style={{
-                                position: 'absolute',
-                                left: user.cursorPosition?.x || 0,
-                                top: user.cursorPosition?.y || 0,
+        <div style={{ display: 'flex', overflowX: 'hidden', width: '100%' }} className='home'>
+            {users.map((user, index) => (
+                <div
+                    ref={el => userRefs.current[index] = el}
+                    key={index}
+                    id={user.nickName}
+                    style={{
+                        flex: '0 0 auto',
+                        width: user.board.width,
+                        height: '100vh',
+                        overflow: 'hidden',
+                        whiteSpace: 'nowrap',
+                        position: 'relative'
+                    }}
+                >
+                    <div
+                        style={{
+                            position: 'absolute',
+                            left: user.cursorPosition?.x || 0,
+                            top: user.cursorPosition?.y || 0,
+                        }}
+                    >
+                        <p
+                            style={{
+                                transform: 'translate(-50%, 350%)',
+                            }}
+                        >
+                            {user.nickName}
+                        </p>
+                        <img
+                            src="https://avatars.githubusercontent.com/u/120030275?v=4"
+                            alt="test"
+                            style={{
                                 transform: 'translate(-50%, -50%)',
                                 width: "80px",
                                 height: "80px"
-                            }} />
-                        </div>
-                    ))}
-                </ul>
-            </main>
+                            }}
+                        />
+                    </div>
+                </div>
+            ))}
         </div>
     );
 }

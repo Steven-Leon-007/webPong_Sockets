@@ -20,16 +20,22 @@ io.on("connection", (socket) => {
 
     socket.on("register", (user) => {
         userService.createUser(user);
-        io.emit('userRegistered', userService.getAllUsers());
+        const absoluteScreen = userService.calculatePositions();
+
+        const usersList = userService.getAllUsers();
+        io.emit('userRegistered', {usersList, absoluteScreen});
     });
 
     socket.on('disconnect', () => {
         userService.deleteUser(socket.id);
-        io.emit('userDisconnected', userService.getAllUsers());
+        const absoluteScreen = userService.calculatePositions();
+        const usersList = userService.getAllUsers();
+
+        io.emit('userDisconnected', {usersList, absoluteScreen});
     });
 
     socket.on('moveCursor', ({ socketId, cursorPosition }) => {
-        userService.updateUserCursor(socketId, cursorPosition); // Actualiza la posición del cursor
+        userService.updateUserCursor(socketId, cursorPosition);
         const updatedUser = userService.getUserBySocketId(socketId);
         io.emit('cursorMoved', { socketId: updatedUser.socketId, cursorPosition: updatedUser.cursorPosition });
     });

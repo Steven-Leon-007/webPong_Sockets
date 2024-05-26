@@ -1,22 +1,11 @@
-import { useState, useEffect } from 'react';
-import socketManager from '../../socketManager'; 
+
+import useMouseMove from '../../hooks/useMouseMove';
+import useScrollIntoView from '../../hooks/useScrollIntoView';
+import useScrollUsers from '../../hooks/useScrollUsers';
+import useUpdateActions from '../../hooks/useUpdateActions';
 
 function HomeFunctions() {
-    const [users, setUsers] = useState([]);
-
-    useEffect(() => {
-        socketManager.onUpdateUsers(setUsers);
-        socketManager.onUpdateUserCursor(setUsers);
-
-        setUsers(socketManager.getAllUsers());
-
-        return () => {
-            socketManager.onUpdateUsers(null);
-            socketManager.onUpdateUserCursor(null);
-        };
-    }, []);
-
-    return users;
+    return { useUpdateActions, useMouseMove, useScrollUsers, useScrollIntoView };
 }
 
 export default HomeFunctions;

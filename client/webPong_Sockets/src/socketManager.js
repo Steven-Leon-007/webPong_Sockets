@@ -2,8 +2,11 @@ import io from 'socket.io-client';
 
 const socket = io('/');
 let allUsers = [];
+let absoluteScreen = { width: 0, height: 0 };
 let updateUsersCallback = null;
 let updateUserCursorCallback = null;
+let updateAbsoluteScreenCallback = null;
+
 
 const socketManager = {
     init() {
@@ -11,14 +14,18 @@ const socketManager = {
             console.log('Connected to socket server');
         });
 
-        socket.on('userRegistered', (usersList) => {
+        socket.on('userRegistered', ({ usersList, absoluteScreen: screen }) => {
             allUsers = usersList;
+            absoluteScreen = screen;
             if (updateUsersCallback) updateUsersCallback(usersList);
+            if (updateAbsoluteScreenCallback) updateAbsoluteScreenCallback(screen);
         });
 
-        socket.on('userDisconnected', (usersList) => {
+        socket.on('userDisconnected', ({ usersList, absoluteScreen: screen }) => {
             allUsers = usersList;
+            absoluteScreen = screen;
             if (updateUsersCallback) updateUsersCallback(usersList);
+            if (updateAbsoluteScreenCallback) updateAbsoluteScreenCallback(screen);
         });
 
         socket.on('allUsers', (usersList) => {
@@ -46,6 +53,18 @@ const socketManager = {
 
     onUpdateUsers(callback) {
         updateUsersCallback = callback;
+    },
+
+    onUpdateAbsoluteScreen(callback) {
+        updateAbsoluteScreenCallback = callback;
+    },
+
+    getAbsoluteScreen() {
+        return absoluteScreen;
+    },
+
+    getCurrentUser() {
+        return allUsers.find(user => user.socketId === socket.id);
     },
 
     updateCursorPosition(cursorPosition) {
