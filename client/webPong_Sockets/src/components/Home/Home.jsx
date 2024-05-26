@@ -2,41 +2,17 @@ import React, { useEffect, useRef, useState } from 'react';
 import './Home.scss';
 import Header from './Header/Header';
 import HomeFunctions from './HomeFunctions';
-import socketManager from '../../socketManager';
 
 function Home({ selectedUserId }) {
-    const { users, absoluteScreen } = HomeFunctions();
+    const { useUpdateActions, useMouseMove, useScrollUsers, useScrollIntoView } = HomeFunctions();
     const userRefs = useRef([]);
+    const { users, absoluteScreen } = useUpdateActions();
 
-    useEffect(() => {
-        const handleMouseMove = (event) => {
-            const cursorPosition = { x: event.clientX, y: event.clientY };
-            socketManager.updateCursorPosition(cursorPosition);
-        };
+    useMouseMove();
+    useScrollUsers(users, userRefs, absoluteScreen);
+    useScrollIntoView(selectedUserId, users, userRefs);
 
-        window.addEventListener('mousemove', handleMouseMove);
-
-        return () => {
-            window.removeEventListener('mousemove', handleMouseMove);
-        };
-    }, []);
-
-    useEffect(() => {
-        users.forEach((user, index) => {
-            if (userRefs.current[index]) {
-                userRefs.current[index].scrollLeft = user.board.position.x;
-            }
-        });
-    }, [absoluteScreen]);
-
-    useEffect(() => {
-        if (selectedUserId) {
-            const userIndex = users.findIndex(user => user.nickName === selectedUserId);
-            if (userIndex !== -1 && userRefs.current[userIndex]) {
-                userRefs.current[userIndex].scrollIntoView({ behavior: 'smooth' });
-            }
-        }
-    }, [selectedUserId, users]);
+    console.log(users);
 
     return (
         <div style={{ display: 'flex', overflowX: 'hidden', width: '100%' }} className='home'>

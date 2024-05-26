@@ -4,11 +4,14 @@ import socketManager from '../../socketManager';
 function loginFormFunctions(setUserLogged, setSelectedUserId) {
   const [formData, setFormData] = useState({ nickName: '', background: '' });
   const screenWidth = window.innerWidth;
+
+  const userType = socketManager.getAllUsers().length >= 2 ? "viewer" : "player";
+
   const handleRegister = () => {
     const { nickName, background } = formData;
     const newUser = {
       nickName,
-      type: 'viewer',
+      type: userType,
       score: 0,
       board: {
         background,
