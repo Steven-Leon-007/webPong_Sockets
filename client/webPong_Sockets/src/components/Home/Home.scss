@@ -1,0 +1,28 @@
+.home {
+    display: flex;
+    overflow-x: hidden;
+}
+
+.user-screen {
+    flex: 0 0 auto;
+    height: 100vh;
+    overflow: hidden;
+    white-space: nowrap;
+    position: relative;
+    background-size:contain; 
+    background-position: center;
+}
+
+.user-screen div {
+    position: absolute;
+}
+
+.nick-name-label {
+    transform: translate(-50%, 350%);
+}
+
+.user-palette {
+    transform: translate(-50%, -50%);
+    width: 80px;
+    height: 80px
+}
