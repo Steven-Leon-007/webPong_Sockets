@@ -12,7 +12,7 @@ function Home({ selectedUserId }) {
     const { useUpdateActions, useMouseMove, useScrollUsers, useScrollIntoView } = HomeFunctions();
     const userRefs = useRef([]);
     const { users, absoluteScreen } = useUpdateActions();
-    let field = "";
+    let field;
 
     if (users.map(user => user.type) == "player") {
         field = `url(${playerFieldImg})`;
@@ -22,10 +22,9 @@ function Home({ selectedUserId }) {
 
     useMouseMove();
     useScrollUsers(users, userRefs, absoluteScreen);
-    useScrollIntoView(selectedUserId, users, userRefs);    
-    
-    return (
-        // <div style={{ width: absoluteScreen.width, backgroundColor:users.map(user => user.board.background)}} className='home'>
+    useScrollIntoView(selectedUserId, users, userRefs);
+
+    return (        
         <div style={{ width: absoluteScreen.width }} className='home'>
             {users.map((user, index) => (
 
@@ -50,19 +49,20 @@ function Home({ selectedUserId }) {
                         <p className='nick-name-label'>
                             {user.nickName}
                         </p>
+                        {user.type !== "viewer" && (
                         <img
-                            // src= {user.type == "player" ? (users.length == 1 ? bluePalleteImg : (users.length == 2 ? orangePalleteImg : playerFieldImg)) : playerFieldImg}
-                            src={bluePalleteImg}
-                            alt="test"
+                            src={index % 2 === 0 ? orangePalleteImg : bluePalleteImg}
+                            alt={user.nickName}
                             className='user-palette'
                         />
+                    )}
                     </div>
 
                 </div>
             ))}
             {/* <div className='disc'>
                 <img src="../../assets/disc.png" alt="disc" />
-            </div> */}
+            </div> */}        
         </div>
     );
 }
