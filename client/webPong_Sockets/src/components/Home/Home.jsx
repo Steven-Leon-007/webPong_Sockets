@@ -3,60 +3,66 @@ import './Home.scss';
 import Header from './Header/Header';
 import HomeFunctions from './HomeFunctions';
 
+import playerFieldImg from '../../assets/player_field.png'
+import viewerFieldImg from '../../assets/viewer_field.png';
+import bluePalleteImg from '../../assets/blue_pallete.png';
+import orangePalleteImg from '../../assets/orange_pallete.png';
+
 function Home({ selectedUserId }) {
     const { useUpdateActions, useMouseMove, useScrollUsers, useScrollIntoView } = HomeFunctions();
     const userRefs = useRef([]);
     const { users, absoluteScreen } = useUpdateActions();
+    let field = "";
+
+    if (users.map(user => user.type) == "player") {
+        field = `url(${playerFieldImg})`;
+    } else {
+        field = `url(${viewerFieldImg})`;
+    }
 
     useMouseMove();
     useScrollUsers(users, userRefs, absoluteScreen);
-    useScrollIntoView(selectedUserId, users, userRefs);
-
-    console.log(users);
-
+    useScrollIntoView(selectedUserId, users, userRefs);    
+    
     return (
-        <div style={{ display: 'flex', overflowX: 'hidden', width: absoluteScreen.width }} className='home'>
+        // <div style={{ width: absoluteScreen.width, backgroundColor:users.map(user => user.board.background)}} className='home'>
+        <div style={{ width: absoluteScreen.width }} className='home'>
             {users.map((user, index) => (
+
                 <div
                     ref={el => userRefs.current[index] = el}
                     key={index}
                     id={user.nickName}
                     style={{
-                        flex: '0 0 auto',
                         width: user.board.width,
-                        height: '100vh',
-                        overflow: 'hidden',
-                        whiteSpace: 'nowrap',
-                        position: 'relative'
+                        height: user.board.height,
+                        backgroundColor: user.board.background,
+                        backgroundImage: user.type === "player" ? `url(${playerFieldImg})` : `url(${viewerFieldImg})`
                     }}
                     className='user-screen'
                 >
                     <div
                         style={{
-                            position: 'absolute',
                             left: user.cursorPosition?.x || 0,
                             top: user.cursorPosition?.y || 0,
                         }}
                     >
-                        <p
-                            style={{
-                                transform: 'translate(-50%, 350%)',
-                            }}
-                        >
+                        <p className='nick-name-label'>
                             {user.nickName}
                         </p>
                         <img
-                            src="https://avatars.githubusercontent.com/u/120030275?v=4"
+                            // src= {user.type == "player" ? (users.length == 1 ? bluePalleteImg : (users.length == 2 ? orangePalleteImg : playerFieldImg)) : playerFieldImg}
+                            src={bluePalleteImg}
                             alt="test"
-                            style={{
-                                transform: 'translate(-50%, -50%)',
-                                width: "80px",
-                                height: "80px"
-                            }}
+                            className='user-palette'
                         />
                     </div>
+
                 </div>
             ))}
+            {/* <div className='disc'>
+                <img src="../../assets/disc.png" alt="disc" />
+            </div> */}
         </div>
     );
 }

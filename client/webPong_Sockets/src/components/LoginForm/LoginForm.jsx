@@ -15,7 +15,7 @@ function UserForm({ setUserLogged, setSelectedUserId }) {
         placeholder="Nickname"
       />
       <input
-        type="text"
+        type="color"
         name="background"
         value={formData.background}
         onChange={handleInputChange}
