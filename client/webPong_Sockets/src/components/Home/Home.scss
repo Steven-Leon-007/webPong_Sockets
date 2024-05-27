@@ -13,6 +13,10 @@
     background-position: center;
 }
 
+.palette-container{
+    z-index: 100;
+}
+
 .user-screen div {
     position: absolute;
 }
@@ -23,6 +27,6 @@
 
 .user-palette {
     transform: translate(-50%, -50%);
-    width: 80px;
-    height: 80px
+    width: 100px;
+    height: 100px
 }

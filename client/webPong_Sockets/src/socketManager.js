@@ -3,9 +3,11 @@ import io from 'socket.io-client';
 const socket = io('/');
 let allUsers = [];
 let absoluteScreen = { width: 0, height: 0 };
+let disc = null;
 let updateUsersCallback = null;
 let updateUserCursorCallback = null;
 let updateAbsoluteScreenCallback = null;
+let updateDiscPositionCallback = null;
 
 
 const socketManager = {
@@ -14,11 +16,13 @@ const socketManager = {
             console.log('Connected to socket server');
         });
 
-        socket.on('userRegistered', ({ usersList, absoluteScreen: screen }) => {
+        socket.on('userRegistered', ({ usersList, absoluteScreen: screen, disc }) => {
             allUsers = usersList;
             absoluteScreen = screen;
+            disc = disc;
             if (updateUsersCallback) updateUsersCallback(usersList);
             if (updateAbsoluteScreenCallback) updateAbsoluteScreenCallback(screen);
+            if (updateDiscPositionCallback) updateDiscPositionCallback(disc);
         });
 
         socket.on('userDisconnected', ({ usersList, absoluteScreen: screen }) => {
@@ -39,12 +43,31 @@ const socketManager = {
             );
             if (updateUserCursorCallback) updateUserCursorCallback(allUsers);
         });
+
+        socket.on('discPositionUpdated', (discPosition) => {
+            disc = discPosition;
+            if (updateDiscPositionCallback) updateDiscPositionCallback(discPosition);
+        });
     },
 
     registerUser(user) {
         const newUser = { ...user, socketId: socket.id };
         allUsers.push(newUser);
-        socket.emit('register', newUser);
+        const disc = {
+            posX: 500,
+            posY: 300,
+            isInGame: false,
+            velX: 5,
+            velY: 5,
+        }
+
+        if (allUsers.length == 2) {
+            const params = { newUser, disc };
+            socket.emit('register', params);
+            return;
+        }
+        const params = { newUser, disc };
+        socket.emit('register', params);
     },
 
     getAllUsers() {
@@ -73,7 +96,17 @@ const socketManager = {
 
     onUpdateUserCursor(callback) {
         updateUserCursorCallback = callback;
+    },
+
+    updateDiscPosition(posX, posY, velX, velY) {
+        console.log(posX, posY, velX, velY);
+        // socket.emit('updateDiscPosition', { posX, posY, velX, velY });
+    },
+
+    onUpdateDiscPosition(callback) {
+        updateDiscPositionCallback = callback;
     }
+
 };
 
 export default socketManager;
