@@ -14,9 +14,11 @@ function Home({ selectedUserId }) {
     const userRefs = useRef([]);
     const boardRef = useRef(null);
     const { users, absoluteScreen } = useUpdateActions();
+
+
     useMouseMove();
     useScrollUsers(users, userRefs, absoluteScreen);
-    useScrollIntoView(selectedUserId, users, userRefs);
+    useScrollIntoView(selectedUserId, users, userRefs, boardRef);
 
     return (
         <div style={{ width: absoluteScreen.width }} className='home' ref={boardRef}>
