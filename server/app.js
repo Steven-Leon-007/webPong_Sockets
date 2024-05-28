@@ -29,7 +29,9 @@ io.on("connection", (socket) => {
             discService.createDisc(disc);
             isDiscCreated = true;
         }
-        userService.calcDiscRelativePosition(userCreated);
+        usersList.forEach(user => {
+            userService.calcDiscRelativePosition(user);
+        });
 
         io.emit('userRegistered', { usersList, absoluteScreen });
     });
@@ -58,7 +60,7 @@ io.on("connection", (socket) => {
                 userService.calcDiscRelativePosition(user);
             });
 
-            io.emit('updateDiscPosition', {usersList, absoluteScreen});
+            io.emit('updateDiscPosition', { usersList, absoluteScreen });
         }, 1000 / 60);
     });
 
