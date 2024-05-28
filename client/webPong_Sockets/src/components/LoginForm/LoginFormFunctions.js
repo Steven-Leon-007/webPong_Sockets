@@ -2,7 +2,7 @@ import { useState } from 'react';
 import socketManager from '../../socketManager';
 
 function loginFormFunctions(setUserLogged, setSelectedUserId) {
-  const [formData, setFormData] = useState({ nickName: '', background: '' });
+  const [formData, setFormData] = useState({ nickName: '', background: '#000000' });
   const screenWidth = window.innerWidth;
 
   const userType = socketManager.getAllUsers().length >= 2 ? "viewer" : "player";

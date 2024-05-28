@@ -1,9 +1,34 @@
 import Disc from "../models/Disc.model.js";
 
 class DiscService {
+    constructor() {
+        this.disc = null;
+    }
+
     createDisc(disc) {
-        console.log("aaaaaa");
         this.disc = new Disc(disc);
+    }
+
+    getDiscPosition() {
+        if (this.disc) {
+            const posX = this.disc.posX;
+            const posY = this.disc.posY;
+            return { posX: posX, posY: posY };
+        }
+        return { posX: 0, posY: 300 };
+    }
+
+    moveDiscAndCollision({ absoluteScreen }) {
+        this.disc.posX += this.disc.velX;
+        this.disc.posY += this.disc.velY;
+
+
+        if (this.disc.posX <= 0 || this.disc.posX >= absoluteScreen.width) {
+            this.disc.velX *= -1;
+        }
+        if (this.disc.posY <= 0 || this.disc.posY >= absoluteScreen.height) {
+            this.disc.velY *= -1;
+        }
     }
 }
 

@@ -2,39 +2,44 @@ import { useEffect } from 'react';
 import socketManager from '../socketManager';
 import useDiscActions from './useDiscActions';
 
-const useDiscMovement = (absoluteScreen, discRef, boardRef) => {
+const useDiscMovement = (absoluteScreen, discRef, boardRef, user) => {
     const { discPosition } = useDiscActions();
 
+
     useEffect(() => {
+
+        if(!user) return;
+
         const disc = discRef.current;
         const content = boardRef.current;
 
-        let posX = discPosition.posX;
-        let posY = discPosition.posY;
+        let posX = user.discRelativePos.posX;
+        let posY = content.offsetHeight / 2 - disc.offsetHeight / 2;
         let velX = discPosition.velX;
         let velY = discPosition.velY;
         const padding = 32;
 
-        const moveDisc = () => {
-            posX += velX;
-            posY += velY;
+        console.log(posX, posY, velX, velY);
 
-            if (posX + disc.clientWidth >= absoluteScreen.width || posX <= 0) {
-                velX *= -1;
-            }
+        // const moveDisc = () => {
+        //     posX += velX;
+        //     posY += velY;
 
-            if (posY + disc.clientHeight >= content.clientHeight - padding || posY <= 0 + padding) {
-                velY *= -1;
-            }
+        //     if (posX + disc.clientWidth >= absoluteScreen.width || posX <= 0) {
+        //         velX *= -1;
+        //     }
 
-            disc.style.left = posX + 'px';
-            disc.style.top = posY + 'px';
+        //     if (posY + disc.clientHeight >= content.clientHeight - padding || posY <= 0 + padding) {
+        //         velY *= -1;
+        //     }
 
-            socketManager.updateDiscPosition(posX, posY, velX, velY);
-            requestAnimationFrame(moveDisc);
-        };
+        //     disc.style.left = posX + 'px';
+        //     disc.style.top = posY + 'px';
+        //     requestAnimationFrame(moveDisc);
+        // };
+        // moveDisc();
 
-        moveDisc();
+
     }, [absoluteScreen, discRef, boardRef, discPosition]);
 };
 
