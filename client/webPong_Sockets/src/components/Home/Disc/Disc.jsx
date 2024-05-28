@@ -1,15 +1,16 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./Disc.scss"
-import useDiscMovement from "../../../hooks/useUpdateDisc";
 import DiscImage from '../../../assets/disc.png';
 
-const Disc = ({ absoluteScreen, boardRef }) => {
+const Disc = ({ absoluteScreen, boardRef, user }) => {
     const discRef = useRef(null);
-  
-    useDiscMovement(absoluteScreen, discRef, boardRef);
+
+    if (!user.discRelativePos) return;
 
     return (
-        <img id="disc" src={DiscImage} ref={discRef} />
+        <img id="disc" src={DiscImage} ref={discRef}
+            style={{ left: user.discRelativePos.posX, top: user.discRelativePos.posY }}
+        />
     );
 };
 

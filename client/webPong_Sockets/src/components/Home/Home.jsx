@@ -14,7 +14,6 @@ function Home({ selectedUserId }) {
     const userRefs = useRef([]);
     const boardRef = useRef(null);
     const { users, absoluteScreen } = useUpdateActions();
-
     useMouseMove();
     useScrollUsers(users, userRefs, absoluteScreen);
     useScrollIntoView(selectedUserId, users, userRefs);
@@ -52,9 +51,9 @@ function Home({ selectedUserId }) {
                         )}
                     </div>
                         : null}
+                    <Disc absoluteScreen={absoluteScreen} boardRef={boardRef} user={user} />
                 </div>
             ))}
-            <Disc absoluteScreen={absoluteScreen} boardRef={boardRef}/>
         </div>
     );
 }
