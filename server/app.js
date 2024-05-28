@@ -1,29 +1,34 @@
 import express from 'express';
 import http from 'http';
 import { Server } from 'socket.io';
-import router from './routes/Index.routes.js';
 import UserService from './services/User.service.js';
+import DiscService from './services/Disc.service.js';
 
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 const PORT = 3000;
 const userService = new UserService();
+const discService = new DiscService();
 
 app.use(express.json());
-
-app.use('/', router);
 
 io.on("connection", (socket) => {
 
     io.emit('allUsers', userService.getAllUsers());
 
-    socket.on("register", (user) => {
-        userService.createUser(user);
+    socket.on("register", (params) => {
+        const {newUser, disc } = params;
+        userService.createUser(newUser);
         const absoluteScreen = userService.calculatePositions();
 
         const usersList = userService.getAllUsers();
-        io.emit('userRegistered', {usersList, absoluteScreen});
+
+        if(usersList.length == 2){
+            discService.createDisc(disc);
+        }
+
+        io.emit('userRegistered', {usersList, absoluteScreen, disc});
     });
 
     socket.on('disconnect', () => {

@@ -1,7 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import './Home.scss';
 import Header from './Header/Header';
 import HomeFunctions from './HomeFunctions';
+import Disc from './Disc/Disc';
 
 import playerFieldImg from '../../assets/player_field.png'
 import viewerFieldImg from '../../assets/viewer_field.png';
@@ -11,21 +12,15 @@ import orangePalleteImg from '../../assets/orange_pallete.png';
 function Home({ selectedUserId }) {
     const { useUpdateActions, useMouseMove, useScrollUsers, useScrollIntoView } = HomeFunctions();
     const userRefs = useRef([]);
+    const boardRef = useRef(null);
     const { users, absoluteScreen } = useUpdateActions();
-    let field;
-
-    if (users.map(user => user.type) == "player") {
-        field = `url(${playerFieldImg})`;
-    } else {
-        field = `url(${viewerFieldImg})`;
-    }
 
     useMouseMove();
     useScrollUsers(users, userRefs, absoluteScreen);
     useScrollIntoView(selectedUserId, users, userRefs);
 
-    return (        
-        <div style={{ width: absoluteScreen.width }} className='home'>
+    return (
+        <div style={{ width: absoluteScreen.width }} className='home' ref={boardRef}>
             {users.map((user, index) => (
 
                 <div
@@ -40,29 +35,26 @@ function Home({ selectedUserId }) {
                     }}
                     className='user-screen'
                 >
-                    <div
+                    {user.type === "player" ? <div
                         style={{
                             left: user.cursorPosition?.x || 0,
                             top: user.cursorPosition?.y || 0,
-                        }}
-                    >
+                        }} className='palette-container'>
                         <p className='nick-name-label'>
                             {user.nickName}
                         </p>
                         {user.type !== "viewer" && (
-                        <img
-                            src={index % 2 === 0 ? orangePalleteImg : bluePalleteImg}
-                            alt={user.nickName}
-                            className='user-palette'
-                        />
-                    )}
+                            <img
+                                src={user == users[0] ? bluePalleteImg : (user == users[users.length - 1] ? orangePalleteImg : null)}
+                                alt={user.nickName}
+                                className='user-palette'
+                            />
+                        )}
                     </div>
-
+                        : null}
                 </div>
             ))}
-            {/* <div className='disc'>
-                <img src="../../assets/disc.png" alt="disc" />
-            </div> */}        
+            <Disc absoluteScreen={absoluteScreen} boardRef={boardRef}/>
         </div>
     );
 }

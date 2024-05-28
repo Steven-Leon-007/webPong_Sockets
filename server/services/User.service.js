@@ -1,5 +1,4 @@
 import User from '../models/User.model.js';
-import Board from '../models/Board.model.js';
 
 class UserService {
     constructor() {
@@ -8,7 +7,8 @@ class UserService {
 
     createUser(user) {
         const newUser = new User(user);
-        this.users.push(newUser);
+        const middleIndex = Math.ceil(this.users.length / 2);
+        this.users.splice(middleIndex, 0, newUser);
     }
 
     deleteUser(socketId) {

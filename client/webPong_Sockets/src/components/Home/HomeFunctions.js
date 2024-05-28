@@ -5,6 +5,7 @@ import useScrollUsers from '../../hooks/useScrollUsers';
 import useUpdateActions from '../../hooks/useUpdateActions';
 
 function HomeFunctions() {
+
     return { useUpdateActions, useMouseMove, useScrollUsers, useScrollIntoView };
 }
 
