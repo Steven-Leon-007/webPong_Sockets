@@ -13,8 +13,4 @@ class User {
     }
 }
 
-function increaseScore() {
-    this.score++;
-}
-
 export default User;
