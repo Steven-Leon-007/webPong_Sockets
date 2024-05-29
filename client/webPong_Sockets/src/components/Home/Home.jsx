@@ -15,6 +15,7 @@ function Home({ selectedUserId }) {
     const userRefs = useRef([]);
     const boardRef = useRef(null);
     const [users, setUsers] = useState([]);
+    const [usersQueue, setUsersQueue] = useState([]);
     const [absoluteScreen, setAbsoluteScreen] = useState({});
     const [discPosition, setDiscPosition] = useState({ posX: 0, posY: 0 });
 
@@ -36,6 +37,10 @@ function Home({ selectedUserId }) {
         socketManager.onUpdateUserCursor((updatedUsers) => {
             setUsers(updatedUsers);
         });
+
+        socketManager.onUpdateQueue((queueUsers) => {
+            setUsersQueue(queueUsers);
+        })
 
     }, []);
 

@@ -89,7 +89,10 @@ class UserService {
 
         user.discRelativePos.posX = relativePosX;
         user.discRelativePos.posY = relativePosY;
+    }
 
+    getQueue(){
+        return this.queue.getItems();
     }
 }
 

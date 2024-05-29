@@ -40,7 +40,8 @@ io.on("connection", (socket) => {
                     posX: user.discRelativePos.posX,
                     posY: user.discRelativePos.posY
                 },
-                absoluteScreen
+                absoluteScreen,
+                queue: userService.getQueue()
             };
             io.to(user.socketId).emit('userRegistered', userSpecificData);
         });
@@ -77,9 +78,10 @@ io.on("connection", (socket) => {
     const startDiscMovement = () => {
         discMovementInterval = setInterval(() => {
             const absoluteScreen = userService.calcBoardSize();
-            discService.moveDiscAndCollision({ absoluteScreen });
-
             const usersList = userService.getAllUsers();
+
+            discService.moveDiscAndCollision({ absoluteScreen, usersList });
+
             usersList.forEach(user => {
                 userService.calcDiscRelativePosition(user);
             });
@@ -94,7 +96,7 @@ io.on("connection", (socket) => {
                 };
                 io.to(user.socketId).emit('updateDiscPosition', userSpecificData);
             });
-        }, 1000 / 60);
+        }, 1000 / 30);
     };
 
     const stopDiscMovement = () => {

@@ -8,6 +8,7 @@ let updateUsersCallback = null;
 let updateUserCursorCallback = null;
 let updateAbsoluteScreenCallback = null;
 let updateDiscCallback = null;
+let updateQueueCallback = null;
 
 const socketManager = {
     init() {
@@ -16,7 +17,7 @@ const socketManager = {
         });
 
         socket.on('userRegistered', (data) => {
-            const { user, discPosition, absoluteScreen } = data;
+            const { user, discPosition, absoluteScreen, queue } = data;
 
             const existingUser = allUsers.find(u => u.socketId === user.socketId);
             if (!existingUser) {
@@ -25,10 +26,10 @@ const socketManager = {
                 Object.assign(existingUser, user);
             }
 
-
             if (updateUsersCallback) updateUsersCallback(allUsers);
             if (updateAbsoluteScreenCallback) updateAbsoluteScreenCallback(absoluteScreen);
             if (updateDiscCallback) updateDiscCallback(discPosition);
+            if(updateQueueCallback) updateQueueCallback(queue);
         });
 
         socket.on('userDisconnected', (userSpecificData) => {
@@ -105,6 +106,10 @@ const socketManager = {
 
     onUpdateDiscPosition(callback) {
         updateDiscCallback = callback;
+    },
+
+    onUpdateQueue(callback){
+        updateQueueCallback = callback;
     }
 };
 
