@@ -80,7 +80,12 @@ io.on("connection", (socket) => {
             const absoluteScreen = userService.calcBoardSize();
             const usersList = userService.getAllUsers();
 
-            discService.moveDiscAndCollision({ absoluteScreen, usersList });
+            const score = discService.moveDiscAndCollision({ absoluteScreen, usersList });
+            if (score !== false) {
+                discService.createDisc();
+
+                updatePlayerScore(score);
+            }
 
             usersList.forEach(user => {
                 userService.calcDiscRelativePosition(user);
@@ -106,6 +111,10 @@ io.on("connection", (socket) => {
             isDiscCreated = false;
         }
     };
+
+    const updatePlayerScore = (score) => {
+        userService.updateUserScore(score);
+    }
 
 
 })

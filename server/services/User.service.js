@@ -25,7 +25,7 @@ class UserService {
 
     deleteUser(socketId) {
         const user = this.users.find(user => user.socketId === socketId);
-        
+
         if (!user) {
             return;
         }
@@ -44,12 +44,12 @@ class UserService {
         }
     }
 
-    updateUserScore(socketId) {
-        const user = this.getUserBySocketId(socketId);
-        const defeatedUser = this.users.filter(player => player.type == "player" && player != user);
+    updateUserScore(results) {
+        const { winner, loser } = results;
+        const user = winner;
         if (user) {
-            user.increaseScore();
-            this.queue.dequeue(defeatedUser[0]);
+            this.increaseScore(user);
+            this.queue.dequeue(loser);
             return user;
         } else {
             throw new Error('User not found');
@@ -91,9 +91,15 @@ class UserService {
         user.discRelativePos.posY = relativePosY;
     }
 
-    getQueue(){
+    getQueue() {
         return this.queue.getItems();
     }
+
+
+    increaseScore(user) {
+        user.score += 1;
+    }
+
 }
 
 export default UserService;

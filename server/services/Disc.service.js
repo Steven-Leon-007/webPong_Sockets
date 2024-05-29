@@ -60,7 +60,12 @@ class DiscService {
         });
 
         if (this.disc.posX <= 0 || this.disc.posX >= absoluteScreen.width) {
-            this.disc.velX *= -1;
+            if (this.disc.posX <= 0) {
+                return ({winner: usersFiltered[0], loser: usersFiltered[1]});
+            }
+            else if (this.disc.posX >= absoluteScreen.width){
+                return ({winner: usersFiltered[1], loser: usersFiltered[0]});;
+            }
         }
 
         if (this.disc.posY <= paddingTop || this.disc.posY >= (absoluteScreen.height - paddingBottom)) {
@@ -69,6 +74,8 @@ class DiscService {
 
         this.disc.posX += this.disc.velX;
         this.disc.posY += this.disc.velY;
+
+        return false;
     }
 
 
