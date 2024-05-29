@@ -24,8 +24,13 @@ class UserService {
     }
 
     deleteUser(socketId) {
-        this.users = this.users.filter(user => user.socketId !== socketId);
+        const user = this.users.find(user => user.socketId === socketId);
+        
+        if (!user) {
+            return;
+        }
         this.queue.remove(this.queue.findUserBySocketId(socketId));
+        this.users = this.users.filter(user => user.socketId !== socketId);
     }
 
     getUserBySocketId(socketId) {
