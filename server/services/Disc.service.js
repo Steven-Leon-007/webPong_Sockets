@@ -31,12 +31,33 @@ class DiscService {
         return { posX: 0, posY: 300 };
     }
 
-    moveDiscAndCollision({ absoluteScreen }) {
+    moveDiscAndCollision({ absoluteScreen, usersList }) {
         const paddingTop = 32;
         const paddingBottom = 54;
 
-        this.disc.posX += this.disc.velX;
-        this.disc.posY += this.disc.velY;
+        const usersFiltered = usersList.filter(user => (user.type === 'player-left' || user.type === 'player-right'));
+
+        const collisionPadding = 20;
+
+
+        usersFiltered.forEach(user => {
+            const cursorPos = user.cursorPosition;
+
+            if (cursorPos) {
+                const paddleTop = cursorPos.y - collisionPadding;
+                const paddleBottom = cursorPos.y + collisionPadding;
+                const paddleLeft = cursorPos.x - collisionPadding;
+                const paddleRight = cursorPos.x + collisionPadding;
+
+                if (
+                    user.discRelativePos.posX + 20 >= paddleLeft && user.discRelativePos.posX - 20 <= paddleRight &&
+                    user.discRelativePos.posY + 20 >= paddleTop && user.discRelativePos.posY - 20 <= paddleBottom
+                ) {
+                    this.disc.velX *= -1;
+                    this.disc.velY *= -1;
+                }
+            }
+        });
 
         if (this.disc.posX <= 0 || this.disc.posX >= absoluteScreen.width) {
             this.disc.velX *= -1;
@@ -45,6 +66,9 @@ class DiscService {
         if (this.disc.posY <= paddingTop || this.disc.posY >= (absoluteScreen.height - paddingBottom)) {
             this.disc.velY *= -1;
         }
+
+        this.disc.posX += this.disc.velX;
+        this.disc.posY += this.disc.velY;
     }
 
 
