@@ -1,16 +1,18 @@
-import React, { useEffect, useRef, useState } from "react";
-import "./Disc.scss"
+import React, { useEffect, useRef } from "react";
+import "./Disc.scss";
 import DiscImage from '../../../assets/disc.png';
 
-const Disc = ({ user }) => {
+const Disc = ({ discPosition }) => {
     const discRef = useRef(null);
-
-    if (!user.discRelativePos) return;
+    useEffect(() => {
+        if (discRef.current && discPosition) {
+            discRef.current.style.left = `${discPosition.posX}px`;
+            discRef.current.style.top = `${discPosition.posY}px`;
+        }
+    }, [discPosition]);
 
     return (
-        <img id="disc" src={DiscImage} ref={discRef}
-            style={{ left: user.discRelativePos.posX, top: user.discRelativePos.posY }}
-        />
+        <img id="disc" src={DiscImage} ref={discRef} className="disc" style={{ position: 'absolute' }} />
     );
 };
 

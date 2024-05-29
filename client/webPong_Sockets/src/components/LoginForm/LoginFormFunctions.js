@@ -5,7 +5,6 @@ function loginFormFunctions(setUserLogged, setSelectedUserId) {
   const [formData, setFormData] = useState({ nickName: '', background: '#ffffff' });
   const [disc, setDisc] = useState(null);
 
-  const userType = socketManager.getAllUsers().length >= 2 ? "viewer" : "player";
   socketManager.getDisc();
 
   const handleRegister = () => {
@@ -13,7 +12,7 @@ function loginFormFunctions(setUserLogged, setSelectedUserId) {
     const { nickName, background } = formData;
     const newUser = {
       nickName,
-      type: userType,
+      type: "viewer",
       score: 0,
       board: {
         background,

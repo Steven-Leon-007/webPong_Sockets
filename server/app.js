@@ -11,38 +11,61 @@ const PORT = 3000;
 const discService = new DiscService();
 const userService = new UserService(discService);
 let isDiscCreated = false;
+let discMovementInterval = null;
 
 app.use(express.json());
 
 io.on("connection", (socket) => {
 
-    io.emit('allUsers', ({usersList: userService.getAllUsers(), disc: discService.getDisc()}));
-
-    socket.on("register", (params) => {
-        const { newUser, disc } = params;
+    socket.on("register", (newUser) => {
         userService.createUser(newUser);
         const absoluteScreen = userService.calculatePositions();
 
         const usersList = userService.getAllUsers();
 
         if (usersList.length == 2 && !isDiscCreated) {
-            discService.createDisc(disc);
+            discService.createDisc();
             isDiscCreated = true;
+            startDiscMovement();
         }
 
         usersList.forEach(user => {
             userService.calcDiscRelativePosition(user);
         });
 
-        io.emit('userRegistered', { usersList, absoluteScreen });
+        usersList.forEach(user => {
+            const userSpecificData = {
+                user,
+                discPosition: {
+                    posX: user.discRelativePos.posX,
+                    posY: user.discRelativePos.posY
+                },
+                absoluteScreen
+            };
+            io.to(user.socketId).emit('userRegistered', userSpecificData);
+        });
     });
 
-    socket.on('disconnect', () => {
+    socket.on("disconnect", () => {
         userService.deleteUser(socket.id);
-        const absoluteScreen = userService.calculatePositions();
         const usersList = userService.getAllUsers();
+        const absoluteScreen = userService.calculatePositions();
 
-        io.emit('userDisconnected', { usersList, absoluteScreen });
+        if (usersList.length < 2) {
+            stopDiscMovement();
+        }
+
+        usersList.forEach(user => {
+            const userSpecificData = {
+                user,
+                discPosition: {
+                    posX: user.discRelativePos.posX,
+                    posY: user.discRelativePos.posY
+                },
+                absoluteScreen
+            };
+            io.to(user.socketId).emit('userDisconnected', userSpecificData);
+        });
     });
 
     socket.on('moveCursor', ({ socketId, cursorPosition }) => {
@@ -51,8 +74,8 @@ io.on("connection", (socket) => {
         io.emit('cursorMoved', { socketId: updatedUser.socketId, cursorPosition: updatedUser.cursorPosition });
     });
 
-    socket.on('startDiscMovement', () => {
-        setInterval(() => {
+    const startDiscMovement = () => {
+        discMovementInterval = setInterval(() => {
             const absoluteScreen = userService.calcBoardSize();
             discService.moveDiscAndCollision({ absoluteScreen });
 
@@ -61,9 +84,27 @@ io.on("connection", (socket) => {
                 userService.calcDiscRelativePosition(user);
             });
 
-            io.emit('updateDiscPosition', { usersList, absoluteScreen });
+            usersList.forEach(user => {
+                const userSpecificData = {
+                    discPosition: {
+                        posX: user.discRelativePos.posX,
+                        posY: user.discRelativePos.posY
+                    },
+                    absoluteScreen
+                };
+                io.to(user.socketId).emit('updateDiscPosition', userSpecificData);
+            });
         }, 1000 / 60);
-    });
+    };
+
+    const stopDiscMovement = () => {
+        if (discMovementInterval) {
+            clearInterval(discMovementInterval);
+            discMovementInterval = null;
+            isDiscCreated = false;
+        }
+    };
+
 
 })
 

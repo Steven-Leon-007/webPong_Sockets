@@ -7,9 +7,7 @@ let disc = null;
 let updateUsersCallback = null;
 let updateUserCursorCallback = null;
 let updateAbsoluteScreenCallback = null;
-let isDiscMoved = false;
 let updateDiscCallback = null;
-
 
 const socketManager = {
     init() {
@@ -17,33 +15,32 @@ const socketManager = {
             console.log('Connected to socket server');
         });
 
-        socket.on('userRegistered', ({ usersList, absoluteScreen: screen }) => {
+        socket.on('userRegistered', (data) => {
+            const { user, discPosition, absoluteScreen } = data;
 
-            allUsers = usersList;
-            absoluteScreen = screen;
-
-            if (allUsers.length === 2 && !isDiscMoved) {
-                socket.emit('startDiscMovement');
-                isDiscMoved = true;
+            const existingUser = allUsers.find(u => u.socketId === user.socketId);
+            if (!existingUser) {
+                allUsers.push(user);
+            } else {
+                Object.assign(existingUser, user);
             }
 
-            if (updateUsersCallback) updateUsersCallback(usersList);
-            if (updateAbsoluteScreenCallback) updateAbsoluteScreenCallback(screen);
+            console.log(allUsers.length);
+
+
+            if (updateUsersCallback) updateUsersCallback(allUsers);
+            if (updateAbsoluteScreenCallback) updateAbsoluteScreenCallback(absoluteScreen);
+            if (updateDiscCallback) updateDiscCallback(discPosition);
         });
 
-        socket.on('userDisconnected', ({ usersList, absoluteScreen: screen }) => {
-            allUsers = usersList;
+        socket.on('userDisconnected', (userSpecificData) => {
+            const { user, discPosition, absoluteScreen } = userSpecificData;
+
+            allUsers = allUsers.filter(u => u.socketId !== user.socketId);
             absoluteScreen = screen;
-            if (updateUsersCallback) updateUsersCallback(usersList);
+
+            if (updateUsersCallback) updateUsersCallback(allUsers);
             if (updateAbsoluteScreenCallback) updateAbsoluteScreenCallback(screen);
-        });
-
-        socket.on('allUsers', ({usersList, disc}) => {
-            allUsers = usersList;
-            disc = disc;
-
-            if (updateUsersCallback) updateUsersCallback(usersList);
-            if(updateDiscCallback) updateDiscCallback(disc);
         });
 
         socket.on('cursorMoved', ({ socketId, cursorPosition }) => {
@@ -53,34 +50,21 @@ const socketManager = {
             if (updateUserCursorCallback) updateUserCursorCallback(allUsers);
         });
 
-        socket.on('updateDiscPosition', ({usersList, absoluteScreen: screen}) => {
-            allUsers = usersList;
-            absoluteScreen = screen;
+        socket.on('updateDiscPosition', (data) => {
+            const { discPosition, absoluteScreen } = data;
 
-            if (updateUsersCallback) updateUsersCallback(usersList);
-            if (updateAbsoluteScreenCallback) updateAbsoluteScreenCallback(screen);
-
+            if (updateDiscCallback) updateDiscCallback(discPosition);
+            if (updateAbsoluteScreenCallback) updateAbsoluteScreenCallback(absoluteScreen);
         });
     },
 
     registerUser(user) {
         const newUser = { ...user, socketId: socket.id };
         allUsers.push(newUser);
-        const disc = {
-            posX: 500,
-            posY: 300,
-            isInGame: true,
-            velX: 3,
-            velY: 3,
-        }
 
-        if (allUsers.length == 2) {
-            const params = { newUser, disc };
-            socket.emit('register', params);
-        } else {
-            const params = { newUser, disc: null };
-            socket.emit('register', params);
-        }
+
+        socket.emit('register', newUser);
+
     },
 
     getAllUsers() {
@@ -92,7 +76,7 @@ const socketManager = {
     },
 
     onUpdateDiscCallback(callback) {
-        updateDiscCallback  = callback;
+        updateDiscCallback = callback;
     },
 
     onUpdateAbsoluteScreen(callback) {
@@ -103,7 +87,7 @@ const socketManager = {
         return absoluteScreen;
     },
 
-    getDisc(){
+    getDisc() {
         return disc;
     },
 
@@ -120,10 +104,8 @@ const socketManager = {
     },
 
     onUpdateDiscPosition(callback) {
-        updateDiscPositionCallback = callback;
+        updateDiscCallback = callback;
     }
-
-
 };
 
 export default socketManager;

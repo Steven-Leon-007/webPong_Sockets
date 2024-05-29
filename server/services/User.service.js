@@ -13,6 +13,12 @@ class UserService {
         const middleIndex = Math.ceil(this.users.length / 2);
         this.users.splice(middleIndex, 0, newUser);
 
+        if (this.users[0] === newUser) {
+            newUser.type = 'player-left';
+        } else if (this.users[this.users.length - 1] === newUser) {
+            newUser.type = 'player-right';
+        }
+
         this.queue.enqueue(newUser);
         return newUser;
     }
