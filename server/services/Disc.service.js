@@ -5,22 +5,25 @@ class DiscService {
         this.disc = null;
     }
 
-    createDisc() {
+    createDisc(color) {
         const disc = {
             posX: 500,
             posY: 300,
             isInGame: true,
             velX: 5,
             velY: 5,
+            color: color,
+            visible: false,
         }
 
         this.disc = new Disc(disc);
+        return disc;
     }
 
-    putDiscInPause() {
-        this.disc.isInGame = false;
+    updateDiscVisibility(){
+        this.disc.visible = true;
+        return this.disc;
     }
-
 
     getDiscPosition() {
         if (this.disc) {

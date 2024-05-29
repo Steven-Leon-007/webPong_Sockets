@@ -18,6 +18,7 @@ function Home({ selectedUserId }) {
     const [usersQueue, setUsersQueue] = useState([]);
     const [absoluteScreen, setAbsoluteScreen] = useState({});
     const [discPosition, setDiscPosition] = useState({ posX: 0, posY: 0 });
+    const [discInfo, setDiscInfo] = useState(null);
 
     useEffect(() => {
 
@@ -40,6 +41,10 @@ function Home({ selectedUserId }) {
 
         socketManager.onUpdateQueue((queueUsers) => {
             setUsersQueue(queueUsers);
+        })
+
+        socketManager.onUpdateDiscInfo((discInfo) => {
+            setDiscInfo(discInfo);
         })
 
     }, [usersQueue]);
@@ -88,7 +93,7 @@ function Home({ selectedUserId }) {
                     ) : null}
                 </div>
             ))}
-            <Disc discPosition={discPosition} />
+            <Disc discPosition={discPosition} discInfo={discInfo}/>
             <UsersQueue usersQueue={usersQueue} />
         </div>
     );

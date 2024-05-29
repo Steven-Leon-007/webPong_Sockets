@@ -7,20 +7,27 @@ let isDiscCreated = false;
 const discService = new DiscService();
 const userService = new UserService(discService);
 
-const register = (socket, io) => (newUser) => {
+let disc = null;
+const register = (socket, io) => ({ newUser, discColor }) => {
+
     userService.createUser(newUser);
     const absoluteScreen = userService.calculatePositions();
     const usersList = userService.getAllUsers();
 
+    if (usersList.length == 1) {
+        disc = discService.createDisc(discColor);
+    }
+
     if (usersList.length === 2 && !isDiscCreated) {
-        discService.createDisc();
         isDiscCreated = true;
+        disc = discService.updateDiscVisibility();
         startDiscMovement(io);
     }
 
     usersList.forEach(user => {
         userService.calcDiscRelativePosition(user);
     });
+
 
     usersList.forEach(user => {
         const userSpecificData = {
@@ -30,7 +37,11 @@ const register = (socket, io) => (newUser) => {
                 posY: user.discRelativePos.posY
             },
             absoluteScreen,
-            queue: userService.getQueue()
+            queue: userService.getQueue(),
+            discInfo: {
+                color: disc.color,
+                visible: disc.visible
+            }
         };
         io.to(user.socketId).emit('userRegistered', userSpecificData);
     });
@@ -109,4 +120,4 @@ const updatePlayerScore = (io, score) => {
     });
 };
 
-export default {register, disconnect, moveCursor};
+export default { register, disconnect, moveCursor };

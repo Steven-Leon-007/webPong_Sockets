@@ -1,8 +1,12 @@
 import React, { useEffect, useRef } from "react";
 import "./Disc.scss";
-import DiscImage from '../../../assets/disc.png';
+import SVGDisc from "./SVGDisc";
 
-const Disc = ({ discPosition }) => {
+const Disc = ({ discPosition, discInfo }) => {
+    if(!discInfo){
+        return;
+    }
+    const { color, visible } = discInfo;
     const discRef = useRef(null);
     useEffect(() => {
         if (discRef.current && discPosition) {
@@ -12,7 +16,7 @@ const Disc = ({ discPosition }) => {
     }, [discPosition]);
 
     return (
-        <img id="disc" src={DiscImage} ref={discRef} className="disc" style={{ position: 'absolute' }} />
+        <SVGDisc color={color} visible={visible} reference={discRef} />
     );
 };
 

@@ -10,7 +10,7 @@ function UserForm({ setUserLogged, setSelectedUserId }) {
     <div className='login-form'>
       <img src={Logo} alt="App logo WebPong" />
       <div className="input-container">
-        <label htmlFor="nickName">Enter a nickname</label>
+        <label htmlFor="nickName">Enter your nickname</label>
         <input
           type="text"
           name="nickName"
@@ -20,17 +20,27 @@ function UserForm({ setUserLogged, setSelectedUserId }) {
         />
       </div>
       <div className="input-container">
-        <label htmlFor="background">Enter the background color you want to use</label>
-        <p> {formData.background}</p>
+        <label htmlFor="background">Enter the board background color</label>
         <input
           type="color"
           name="background"
           value={formData.background}
           onChange={handleInputChange}
-          placeholder="Background"
+          placeholder="Background Color"
         />
       </div>
-      <button onClick={handleRegister}>Play</button>
+      <div className="input-container">
+        <label htmlFor="discColor">Enter the disc color you want</label>
+        <input
+          type="color"
+          name="discColor"
+          value={formData.discColor}
+          onChange={handleInputChange}
+          placeholder="Disc Color"
+        />
+      </div>
+      <button onClick={handleRegister}>Register</button>
+
     </div>
   );
 }

@@ -14,7 +14,7 @@ const UsersQueue = ({ usersQueue }) => {
     return (
         <div className="users-queue-container">
             <button className="users-queue-toggle" onClick={toggleQueue}>
-                {isOpen ? "Hide Queue" : "Show Queue"}
+                {isOpen ? "Hide Scores" : "Show Scores"}
             </button>
             <div className={`users-queue ${isOpen ? 'open' : 'closed'}`}>
                 <ul>
