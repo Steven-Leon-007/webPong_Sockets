@@ -8,13 +8,14 @@ This project is a multiplayer gaming application accessible through web browsers
 
 
 #  Architecture
-The webPong_Sockets backend architecture is organized by layers, which consist of various layers essential for its operation. At the root of the directory is the app.js file, which acts as the entry point of the backend, in addition, there are several folders that structure the code in a modular way: models stores the data definitions and model structures; services includes the business logic and services that interact with the models, and utils contains utilities and support functions that facilitate various operations. This layered organization allows for a clear separation of responsibilities, facilitating project maintenance and scalability.
+The webPong_Sockets backend architecture is organized by layers, which consist of various layers essential for its operation. At the root of the directory is the app.js file, which acts as the entry point of the backend, in addition, there are several folders that structure the code in a modular way: models stores the data definitions and model structures; services includes the business logic and services that interact with the models, utils contains utilities and support functions that facilitate various operations; and controllers sends and receives data to frontend. This layered organization allows for a clear separation of responsibilities, facilitating project maintenance and scalability.
 
 >webPong_Sockets/
 └── server/
     ├── models/
     ├── services/
     ├── utils/
+    ├── controllers/
     ├── README.md 
     └── app.js
 
