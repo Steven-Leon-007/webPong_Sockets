@@ -17,12 +17,11 @@ function Home({ selectedUserId }) {
     const [absoluteScreen, setAbsoluteScreen] = useState({});
     const [discPosition, setDiscPosition] = useState({ posX: 0, posY: 0 });
 
-    console.log(users);
-
     useEffect(() => {
 
         socketManager.onUpdateUsers((usersList) => {
             setUsers(usersList);
+            const user = usersList.find(user => user.socketId === socketManager.getCurrentUser().socketId);
         });
 
         socketManager.onUpdateDiscCallback((discPosition) => {
@@ -33,11 +32,17 @@ function Home({ selectedUserId }) {
             setAbsoluteScreen(screen);
         });
 
+        socketManager.onUpdateUserCursor((updatedUsers) => {
+            setUsers(updatedUsers);
+        });
+
     }, []);
 
-    useMouseMove();
     useScrollUsers(users, userRefs, absoluteScreen);
     useScrollIntoView(selectedUserId, users, userRefs, boardRef);
+    
+    useMouseMove();
+
 
     return (
         <div style={{ width: absoluteScreen.width }} className='home' ref={boardRef}>

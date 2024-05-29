@@ -21,6 +21,7 @@ class DiscService {
         this.disc.isInGame = false;
     }
 
+
     getDiscPosition() {
         if (this.disc) {
             const posX = this.disc.posX;

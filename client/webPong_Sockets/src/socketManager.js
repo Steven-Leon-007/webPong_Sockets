@@ -25,8 +25,6 @@ const socketManager = {
                 Object.assign(existingUser, user);
             }
 
-            console.log(allUsers.length);
-
 
             if (updateUsersCallback) updateUsersCallback(allUsers);
             if (updateAbsoluteScreenCallback) updateAbsoluteScreenCallback(absoluteScreen);
@@ -34,9 +32,7 @@ const socketManager = {
         });
 
         socket.on('userDisconnected', (userSpecificData) => {
-            const { user, discPosition, absoluteScreen } = userSpecificData;
-
-            allUsers = allUsers.filter(u => u.socketId !== user.socketId);
+            const { user, discPosition, absoluteScreen: screen } = userSpecificData;
             absoluteScreen = screen;
 
             if (updateUsersCallback) updateUsersCallback(allUsers);
@@ -96,6 +92,10 @@ const socketManager = {
     },
 
     updateCursorPosition(cursorPosition) {
+        const sender = allUsers.find(user => user.socketId === socket.id);
+        if(sender.type === "viewer"){
+            return;
+        }
         socket.emit('moveCursor', { socketId: socket.id, cursorPosition });
     },
 

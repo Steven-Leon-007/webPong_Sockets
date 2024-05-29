@@ -13,7 +13,7 @@ const useMouseMove = () => {
         return () => {
             window.removeEventListener('mousemove', handleMouseMove);
         };
-    }, [socketManager]);
+    }, []);
 };
 
 export default useMouseMove;
