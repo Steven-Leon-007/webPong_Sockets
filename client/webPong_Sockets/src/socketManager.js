@@ -33,9 +33,9 @@ const socketManager = {
         });
 
         socket.on('userDisconnected', (userSpecificData) => {
-            const { user, discPosition, absoluteScreen: screen } = userSpecificData;
+            const { user, discPosition, absoluteScreen: screen, queue } = userSpecificData;
             absoluteScreen = screen;
-
+            if(updateQueueCallback) updateQueueCallback(queue);
             if (updateUsersCallback) updateUsersCallback(allUsers);
             if (updateAbsoluteScreenCallback) updateAbsoluteScreenCallback(screen);
         });

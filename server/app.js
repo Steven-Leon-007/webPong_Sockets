@@ -63,7 +63,8 @@ io.on("connection", (socket) => {
                     posX: user.discRelativePos.posX,
                     posY: user.discRelativePos.posY
                 },
-                absoluteScreen
+                absoluteScreen,
+                queue: userService.getQueue()
             };
             io.to(user.socketId).emit('userDisconnected', userSpecificData);
         });

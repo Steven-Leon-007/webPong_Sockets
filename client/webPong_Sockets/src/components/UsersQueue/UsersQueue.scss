@@ -27,9 +27,14 @@
 }
 
 .users-queue li {
+    display: flex;
+    justify-content: center;
+    align-items: center;    
     padding: 10px;
     text-align: center;
     border-bottom: 1px solid #ddd;
+    gap: 1rem;
+    font-weight: bold;
 }
 
 .users-queue-toggle {
@@ -54,4 +59,15 @@ button:hover {
 
 .users-queue li:hover{
     background-color: rgb(201, 195, 195);
+}
+
+.player{
+    color: red;
+}
+
+img{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 2rem;
 }
