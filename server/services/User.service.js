@@ -49,7 +49,6 @@ class UserService {
         const user = winner;
         if (user) {
             this.increaseScore(user);
-            // this.queue.dequeue(loser);
             return this.getQueue();
         } else {
             throw new Error('User not found');
