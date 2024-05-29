@@ -16,11 +16,11 @@ app.use(express.json());
 
 io.on("connection", (socket) => {
 
-    io.emit('allUsers', userService.getAllUsers());
+    io.emit('allUsers', ({usersList: userService.getAllUsers(), disc: discService.getDisc()}));
 
     socket.on("register", (params) => {
         const { newUser, disc } = params;
-        const userCreated = userService.createUser(newUser);
+        userService.createUser(newUser);
         const absoluteScreen = userService.calculatePositions();
 
         const usersList = userService.getAllUsers();
@@ -29,6 +29,7 @@ io.on("connection", (socket) => {
             discService.createDisc(disc);
             isDiscCreated = true;
         }
+
         usersList.forEach(user => {
             userService.calcDiscRelativePosition(user);
         });

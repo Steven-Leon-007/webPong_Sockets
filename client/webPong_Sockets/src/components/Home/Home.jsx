@@ -53,7 +53,7 @@ function Home({ selectedUserId }) {
                         )}
                     </div>
                         : null}
-                    <Disc absoluteScreen={absoluteScreen} boardRef={boardRef} user={user} />
+                    <Disc user={user} />
                 </div>
             ))}
         </div>

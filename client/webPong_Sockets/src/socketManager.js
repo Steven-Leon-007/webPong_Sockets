@@ -8,7 +8,7 @@ let updateUsersCallback = null;
 let updateUserCursorCallback = null;
 let updateAbsoluteScreenCallback = null;
 let isDiscMoved = false;
-let updateDiscPositionCallback = null;
+let updateDiscCallback = null;
 
 
 const socketManager = {
@@ -38,9 +38,12 @@ const socketManager = {
             if (updateAbsoluteScreenCallback) updateAbsoluteScreenCallback(screen);
         });
 
-        socket.on('allUsers', (usersList) => {
+        socket.on('allUsers', ({usersList, disc}) => {
             allUsers = usersList;
+            disc = disc;
+
             if (updateUsersCallback) updateUsersCallback(usersList);
+            if(updateDiscCallback) updateDiscCallback(disc);
         });
 
         socket.on('cursorMoved', ({ socketId, cursorPosition }) => {
@@ -66,7 +69,7 @@ const socketManager = {
         const disc = {
             posX: 500,
             posY: 300,
-            isInGame: false,
+            isInGame: true,
             velX: 3,
             velY: 3,
         }
@@ -88,12 +91,20 @@ const socketManager = {
         updateUsersCallback = callback;
     },
 
+    onUpdateDiscCallback(callback) {
+        updateDiscCallback  = callback;
+    },
+
     onUpdateAbsoluteScreen(callback) {
         updateAbsoluteScreenCallback = callback;
     },
 
     getAbsoluteScreen() {
         return absoluteScreen;
+    },
+
+    getDisc(){
+        return disc;
     },
 
     getCurrentUser() {

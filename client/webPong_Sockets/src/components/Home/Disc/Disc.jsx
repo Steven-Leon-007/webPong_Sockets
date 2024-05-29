@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import "./Disc.scss"
 import DiscImage from '../../../assets/disc.png';
 
-const Disc = ({ absoluteScreen, boardRef, user }) => {
+const Disc = ({ user }) => {
     const discRef = useRef(null);
 
     if (!user.discRelativePos) return;

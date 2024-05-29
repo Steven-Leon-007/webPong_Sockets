@@ -9,6 +9,10 @@ class DiscService {
         this.disc = new Disc(disc);
     }
 
+    putDiscInPause(){
+        this.disc.isInGame = false;
+    }
+
     getDiscPosition() {
         if (this.disc) {
             const posX = this.disc.posX;
@@ -29,6 +33,10 @@ class DiscService {
         if (this.disc.posY <= 0 || this.disc.posY >= absoluteScreen.height) {
             this.disc.velY *= -1;
         }
+    }
+
+    getDisc(){
+        return this.disc;
     }
 }
 

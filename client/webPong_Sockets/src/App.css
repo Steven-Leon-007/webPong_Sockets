@@ -12,10 +12,12 @@
 body {
   background-color: var(--bg-color);
   color: var(--text-color);
+  font-family: 'Courier New', Courier, monospace;
 }
 
 .app {
   overflow: hidden;
   display: flex;
   align-items: center;
+  height: 100vh;
 }
