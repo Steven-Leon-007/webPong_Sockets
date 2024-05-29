@@ -5,7 +5,6 @@ class QueueUtil {
     
     enqueue(user) {
         this.queue.push(user);
-
         this.updateUserTypes();
     }
 
@@ -33,9 +32,9 @@ class QueueUtil {
 
     updateUserTypes() {
         if (this.queue.length >= 1) {
-            this.queue[0].type = "player";
+            this.queue[0].type = "player-left";
             if (this.queue.length >= 2) {
-                this.queue[1].type = "player";
+                this.queue[1].type = "player-right";
             }
         }
     

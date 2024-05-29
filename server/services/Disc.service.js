@@ -5,8 +5,20 @@ class DiscService {
         this.disc = null;
     }
 
-    createDisc(disc) {
+    createDisc() {
+        const disc = {
+            posX: 500,
+            posY: 300,
+            isInGame: true,
+            velX: 5,
+            velY: 5,
+        }
+
         this.disc = new Disc(disc);
+    }
+
+    putDiscInPause() {
+        this.disc.isInGame = false;
     }
 
     getDiscPosition() {
@@ -19,16 +31,24 @@ class DiscService {
     }
 
     moveDiscAndCollision({ absoluteScreen }) {
+        const paddingTop = 32;
+        const paddingBottom = 54;
+
         this.disc.posX += this.disc.velX;
         this.disc.posY += this.disc.velY;
-
 
         if (this.disc.posX <= 0 || this.disc.posX >= absoluteScreen.width) {
             this.disc.velX *= -1;
         }
-        if (this.disc.posY <= 0 || this.disc.posY >= absoluteScreen.height) {
+
+        if (this.disc.posY <= paddingTop || this.disc.posY >= (absoluteScreen.height - paddingBottom)) {
             this.disc.velY *= -1;
         }
+    }
+
+
+    getDisc() {
+        return this.disc;
     }
 }
 
