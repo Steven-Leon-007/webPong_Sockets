@@ -1,16 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import "./UsersQueue.scss";
+import discImage from '../../assets/disc.png';
 
-const UsersQueue = () => {
-
-    const user1 ={"name":"diegoschi", "score":0};
-    const user2 = {"name":"Estivman", "score":0};
-    const user3 = {"name":"AUUUUU", "score":0};
-    const user4 = {"name":"Homosexuales varios", "score":0};
-
+const UsersQueue = ({ usersQueue }) => {
 
     const [isOpen, setIsOpen] = useState(false);
-    const users = [user1, user2, user3, user4];    
+    const users = usersQueue;
 
     const toggleQueue = () => {
         setIsOpen(!isOpen);
@@ -24,7 +19,16 @@ const UsersQueue = () => {
             <div className={`users-queue ${isOpen ? 'open' : 'closed'}`}>
                 <ul>
                     {users.map((user, index) => (
-                        <li key={index}>{user.name} - {user.score}</li>
+                        (user.type === "player-left" || user.type === "player-right") ? (
+                            <li key={index} className={`player`}>
+                                <img src={discImage} alt="" />
+                                {user.nickName} - {user.score}
+                            </li>
+                        ) : (
+                            <li key={index} className={`viewer`}>
+                                {user.nickName} - {user.score}
+                            </li>
+                        )
                     ))}
                 </ul>
             </div>

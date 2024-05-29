@@ -89,7 +89,7 @@ function Home({ selectedUserId }) {
                 </div>
             ))}
             <Disc discPosition={discPosition} />
-            <UsersQueue />
+            <UsersQueue usersQueue={usersQueue} />
         </div>
     );
 }
