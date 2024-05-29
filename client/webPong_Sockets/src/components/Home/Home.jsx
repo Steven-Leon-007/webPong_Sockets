@@ -11,7 +11,7 @@ import socketManager from '../../socketManager';
 import UsersQueue from '../UsersQueue/UsersQueue';
 
 function Home({ selectedUserId }) {
-    const { useUpdateActions, useMouseMove, useScrollUsers, useScrollIntoView } = HomeFunctions();
+    const { useMouseMove, useScrollUsers, useScrollIntoView } = HomeFunctions();
     const userRefs = useRef([]);
     const boardRef = useRef(null);
     const [users, setUsers] = useState([]);
@@ -42,11 +42,11 @@ function Home({ selectedUserId }) {
             setUsersQueue(queueUsers);
         })
 
-    }, []);
+    }, [usersQueue]);
 
     useScrollUsers(users, userRefs, absoluteScreen);
     useScrollIntoView(selectedUserId, users, userRefs, boardRef);
-    
+
     useMouseMove();
 
 

@@ -53,6 +53,10 @@ const socketManager = {
             if (updateDiscCallback) updateDiscCallback(discPosition);
             if (updateAbsoluteScreenCallback) updateAbsoluteScreenCallback(absoluteScreen);
         });
+
+        socket.on("updateScore", (queue) => {
+            if(updateQueueCallback) updateQueueCallback(queue);
+        })
     },
 
     registerUser(user) {

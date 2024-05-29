@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import "./UsersQueue.scss";
 import discImage from '../../assets/disc.png';
 

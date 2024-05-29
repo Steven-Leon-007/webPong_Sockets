@@ -61,10 +61,10 @@ class DiscService {
 
         if (this.disc.posX <= 0 || this.disc.posX >= absoluteScreen.width) {
             if (this.disc.posX <= 0) {
-                return ({winner: usersFiltered[0], loser: usersFiltered[1]});
+                return ({winner: usersFiltered[1], loser: usersFiltered[0]});
             }
             else if (this.disc.posX >= absoluteScreen.width){
-                return ({winner: usersFiltered[1], loser: usersFiltered[0]});;
+                return ({winner: usersFiltered[0], loser: usersFiltered[1]});;
             }
         }
 
