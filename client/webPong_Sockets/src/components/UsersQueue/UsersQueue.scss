@@ -1,0 +1,57 @@
+.users-queue-container {
+    position: relative;
+}
+
+.users-queue {
+    color: black;
+    position: fixed;
+    top: 50px;    
+    right: 20px;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.3s ease-in-out;
+    z-index: 1000;
+}
+
+.users-queue.open {
+    max-height: 100%;
+}
+
+.users-queue ul {
+    list-style: none;
+    width: 200px;
+    padding: 0;
+    margin: 0;    
+}
+
+.users-queue li {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+.users-queue-toggle {
+    font-size: 1rem;
+    font-family: 'Courier New', Courier, monospace;
+    position: relative;
+    width: 200px;
+    top: 5px;
+    right: 220px;
+    z-index: 1001;
+    background-color: #FB8500;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #c06906;
+}
+
+.users-queue li:hover{
+    background-color: rgb(201, 195, 195);
+}

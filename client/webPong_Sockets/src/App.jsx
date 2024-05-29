@@ -9,6 +9,17 @@ function App() {
   const [selectedUserId, setSelectedUserId] = useState(null);
   useEffect(() => {
     socketManager.init();
+    const handleKeyDown = (event) => {
+      if ((event.ctrlKey || event.metaKey) && (event.key === '+' || event.key === '-' || event.key === '=')) {
+        event.preventDefault();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
   }, []);
 
   return (

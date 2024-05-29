@@ -8,6 +8,7 @@ import viewerFieldImg from '../../assets/viewer_field.png';
 import bluePaletteImg from '../../assets/blue_pallete.png';
 import orangePaletteImg from '../../assets/orange_pallete.png';
 import socketManager from '../../socketManager';
+import UsersQueue from '../UsersQueue/UsersQueue';
 
 function Home({ selectedUserId }) {
     const { useUpdateActions, useMouseMove, useScrollUsers, useScrollIntoView } = HomeFunctions();
@@ -78,6 +79,7 @@ function Home({ selectedUserId }) {
                 </div>
             ))}
             <Disc discPosition={discPosition} />
+            <UsersQueue />
         </div>
     );
 }
